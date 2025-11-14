@@ -26,8 +26,6 @@
 #SBATCH -N 1                    # Total # of nodes (must be 1 for OpenMP)
 #SBATCH -n 1                    # Total # of mpi tasks (should be 1 for OpenMP)
 #SBATCH -t {time_str}           # Run time (hh:mm:ss)
-#SBATCH --cpus-per-task=16
-#SBATCH --exclusive
 {email_str}
 {email_type_str}
 
@@ -71,7 +69,7 @@ pwd
 
 
 # Set thread count (default value is 1)...
-export OMP_NUM_THREADS=16
+export OMP_NUM_THREADS=48
 
 {command}
 

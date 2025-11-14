@@ -170,10 +170,21 @@ rule bismark_split_r1:
         3
     resources:
         mem_mb=14000
+    
     shell:
+    """
+    bismark {bismark_reference} \
+        --bowtie1 \
+        --pbat \
+        -o bam/ \
+        --temp_dir bam/ \
+        {input}
+    """
+
+    #shell:
         # map R1 with --pbat mode
-        "bismark {bismark_reference} --bowtie1 {input} "
-        "--pbat -o bam/ --temp_dir bam/"
+        #"bismark {bismark_reference} --bowtie1 {input} "
+       # "--pbat -o bam/ --temp_dir bam/"
 
 rule bismark_split_r2:
     input:
@@ -186,9 +197,29 @@ rule bismark_split_r2:
     resources:
         mem_mb=14000
     shell:
+        """
+        bismark {bismark_reference} \
+            --bowtie1 \
+            -o bam/ \
+            --temp_dir bam/ \
+            {input}
+        """
+
+
+#rule bismark_split_r2:
+   # input:
+       # "bam/{cell_id}-R2.trimmed.fq.gz_unmapped_reads.split.fq.gz"
+   # output:
+      #  bam=temp("bam/{cell_id}-R2.trimmed.fq.gz_unmapped_reads.split_bismark.bam"),
+      #  stats=temp("bam/{cell_id}-R2.trimmed.fq.gz_unmapped_reads.split_bismark_SE_report.txt")
+   # threads:
+      #  3
+   # resources:
+      #  mem_mb=14000
+    #shell:
         # map R2 with normal SE mode
-        "bismark {bismark_reference} --bowtie1 {input} "
-        "-o bam/ --temp_dir bam/"
+       # "bismark {bismark_reference} --bowtie1 {input} "
+       # "-o bam/ --temp_dir bam/"
 
 
 # merge two bam files

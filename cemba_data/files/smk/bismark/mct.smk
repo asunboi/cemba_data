@@ -65,6 +65,7 @@ rule trim:
         2
     shell:
         "cutadapt -a R1Adapter={params.adapter} "
+        "-j 0 -n 5 -O 8 "
         "-a TSO=AAGCAGTGGTATCAACGCAGAGTGAATGG "
         "-a N6=AAGCAGTGGTATCAACGCAGAGTAC "
         "-a TSO_rc=CCATTCACTCTGCGTTGATACCACTGCTT "
