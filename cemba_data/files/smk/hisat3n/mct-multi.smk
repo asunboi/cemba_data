@@ -63,6 +63,7 @@ module mct:
     snakefile:
         # here, plain paths, URLs and the special markers for code hosting providers (see below) are possible.
             os.path.join(PACKAGE_DIR,"files","smk",'hisat3n',"mct.smk")
+    config: config
 
 use rule * from mct exclude sort_dna_bam as mct_*
 

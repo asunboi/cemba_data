@@ -240,7 +240,7 @@ def aggregate_feature_counts(output_dir):
 	output_dir = pathlib.Path(output_dir)
 	cell_data = []
 
-	count_paths = list(output_dir.glob('*/rna_bam/*.feature_count.tsv'))
+	count_paths = list(output_dir.glob('*/*bam/*.feature_count.tsv'))
 	if len(count_paths) == 0:
 		return
 

@@ -76,7 +76,7 @@ def make_snakefile(output_dir,aligner="bismark"):
 	if aligner.lower()=="bismark":
 		snakefile_path=os.path.join(PACKAGE_DIR, f'files/smk/bismark/{mode.lower()}.smk')
 	elif aligner.lower() in ['hisat3n', 'hisat-3n', 'hisat_3n', 'hisat']:
-		snakefile_path = os.path.join(PACKAGE_DIR, f'files/smk/hisat3n/{mode.lower()}.smk')
+		snakefile_path = os.path.join(PACKAGE_DIR, f'files/smk/hisat3n/{mode.lower()}-se.smk')
 		snakemake_dir = output_dir / 'snakemake'
 		snakemake_dir.mkdir(exist_ok=True)
 		subprocess.run(['touch', f'{output_dir}/snakemake/hisat3n'], check=True)
