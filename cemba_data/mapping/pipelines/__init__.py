@@ -77,7 +77,10 @@ def make_snakefile(output_dir,aligner="bismark"):
 		snakefile_path=os.path.join(PACKAGE_DIR, f'files/smk/bismark/{mode.lower()}.smk')
 	elif aligner.lower() in ['hisat3n', 'hisat-3n', 'hisat_3n', 'hisat']:
 		snakefile_path = os.path.join(PACKAGE_DIR, f'files/smk/hisat3n/{mode.lower()}.smk')
+		snakemake_dir = output_dir / 'snakemake'
+		snakemake_dir.mkdir(exist_ok=True)
 		subprocess.run(['touch', f'{output_dir}/snakemake/hisat3n'], check=True)
+		
 	else:
 		raise ValueError(f"Unknown aligner: {aligner}")
 	with open(snakefile_path) as f:
@@ -250,9 +253,11 @@ def write_qsub_commands(output_dir, cores_per_job, total_memory_gb=None,
 	script_path = script_dir / 'snakemake_cmd.txt'
 	with open(script_path, 'w') as f:
 		try:
-			uid_order = pd.read_csv(
-				output_dir / 'stats/UIDTotalCellInputReadPairs.csv', index_col=0,header=None
-			).squeeze().sort_values(ascending=False)
+			uid_df = pd.read_csv(
+				output_dir / 'stats/UIDTotalCellInputReadPairs.csv', index_col=0, header=None
+			)
+			uid_order = uid_df.iloc[:, 0].sort_values(ascending=False)
+			
 			for uid in uid_order.index:
 				if uid in cmds:
 					f.write(cmds.pop(uid) + '\n')
@@ -317,9 +322,11 @@ def write_sbatch_commands(output_dir, cores_per_job, script_dir, total_mem_mb, q
 	script_path = script_dir / f'snakemake_{queue}_cmd.txt'
 	with open(script_path, 'w') as f:
 		try:
-			uid_order = pd.read_csv(
-				output_dir / 'stats/UIDTotalCellInputReadPairs.csv', index_col=0,header=None
-			).squeeze().sort_values(ascending=False)
+			uid_df = pd.read_csv(
+				output_dir / 'stats/UIDTotalCellInputReadPairs.csv', index_col=0, header=None
+			)
+			uid_order = uid_df.iloc[:, 0].sort_values(ascending=False)
+
 			for uid in uid_order.index:
 				if uid in cmds:
 					f.write(cmds.pop(uid) + '\n')
@@ -429,7 +436,7 @@ def prepare_sbatch(name, snakemake_dir, queue,total_memory_gb=None):
 			time_str = "48:00:00"
 			total_mem_mb = input_total_mem_mb if not input_total_mem_mb is None else 64*2*1024
 		elif mode.split('-')[0] == 'mct':
-			time_str = "48:00:00"
+			time_str = "240:00:00"
 			total_mem_mb = input_total_mem_mb if not input_total_mem_mb is None else 64*2*1024
 		else:
 			raise KeyError(f'Unknown mode {mode}')
